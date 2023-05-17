@@ -48,6 +48,12 @@ class Main:
                         game.show_pieces(screen)
                         dragger.update_blit(screen)
 
+                elif event.type == pygame.MOUSEBUTTONUP:
+                    if dragger.dragging:
+                        dragger.update_mouse(event.pos)
+                        released_row = dragger.mouseY // SQSIZE
+                        released_col = dragger.mouseX // SQSIZE
+
                 # no hacer click
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     dragger.undrag_piece()

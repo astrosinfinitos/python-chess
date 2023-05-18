@@ -10,7 +10,7 @@ class Main:
     def __init__(self):
         pygame.init()
         self.screen = pygame.display.set_mode((WIDTH, HEIGHT))
-        pygame.display.set_caption('Ajedrez')
+        pygame.display.set_caption('Chess')
         self.game = Game()
 
     def mainloop(self):
@@ -21,7 +21,9 @@ class Main:
         dragger = self.game.dragger
 
         while True:
+            # mostrar métodos
             self.game.show_bg(screen)
+            game.show_moves(screen)
             game.show_pieces(screen)
 
             if dragger.dragging:
@@ -37,14 +39,21 @@ class Main:
                     # Si la casilla clicada tiene una pieza
                     if board.squares[clicked_row][clicked_col].has_piece():
                         piece = board.squares[clicked_row][clicked_col].piece
+                        board.calc_moves(piece, clicked_row, clicked_col)
                         dragger.save_initial(event.pos)
                         dragger.drag_piece(piece)
+                        # mostrar métodos
+                        game.show_bg(screen)
+                        game.show_moves(screen)
+                        game.show_pieces(screen)
 
                 # mouse motion
                 elif event.type == pygame.MOUSEMOTION:
                     if dragger.dragging:
                         dragger.update_mouse(event.pos)
+                        # mostrar métodos
                         game.show_bg(screen)
+                        game.show_moves(screen)
                         game.show_pieces(screen)
                         dragger.update_blit(screen)
 
@@ -53,7 +62,6 @@ class Main:
                         dragger.update_mouse(event.pos)
                         released_row = dragger.mouseY // SQSIZE
                         released_col = dragger.mouseX // SQSIZE
-
                 # no hacer click
                 elif event.type == pygame.MOUSEBUTTONDOWN:
                     dragger.undrag_piece()

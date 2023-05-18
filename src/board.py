@@ -1,6 +1,7 @@
 from const import *
 from square import Square
 from piece import *
+from move import Move
 
 
 class Board:
@@ -10,6 +11,47 @@ class Board:
         self._create()
         self._add_pieces('white')
         self._add_pieces('black')
+
+    # Calcular todos los movimientos válidos de una pieza en una posición
+    def calc_moves(self, piece, row, col):
+
+        def knight_moves():
+            # 8 movimientos posibles
+            possible_moves = [
+                (row-2, col+1),
+                (row-1, col+2),
+                (row+1, col+2),
+                (row+2, col+1),
+                (row+2, col-1),
+                (row+1, col-2),
+                (row-1, col-2),
+                (row-2, col-1),
+            ]
+
+            for possible_move in possible_moves:
+                possible_move_row, possible_move_col = possible_move
+                if Square.in_range(possible_move_row, possible_move_col):
+                    if self.squares[possible_move_row][possible_move_col].isempty_or_rival(piece.color):
+                        # Nuevos movimientos
+                        initial = Square(row, col)
+                        # Pieza es igual a pieza
+                        final = Square(possible_move_row, possible_move_col)
+                        # Crear nuevo movimiento
+                        move = Move(initial, final)
+                        # Añadir nuevo movimiento válido
+                        piece.add_move(move)
+        if isinstance(piece, Pawn):
+            pass
+        elif isinstance(piece, Knight):
+            knight_moves()
+        elif isinstance(piece, Bishop):
+            pass
+        elif isinstance(piece, Rook):
+            pass
+        elif isinstance(piece, Queen):
+            pass
+        elif isinstance(piece, King):
+            pass
 
     def _create(self):
         for row in range(ROWS):

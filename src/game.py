@@ -1,4 +1,5 @@
 import pygame
+import sys
 
 from const import *
 from board import Board
@@ -15,6 +16,7 @@ class Game:
         self.board = Board()
         self.dragger = Dragger()
         self.config = Config()
+        self.timer = 60
 
     # blit methods
 
@@ -52,6 +54,21 @@ class Game:
                     lbl_pos = (col * SQSIZE + SQSIZE - 20, HEIGHT - 20)
                     # blit
                     surface.blit(lbl, lbl_pos)
+         # Dibujar el cronómetro
+        self.draw_timer(surface)
+
+    def draw_timer(self, surface):
+        font = pygame.font.Font(None, 36)
+        text = font.render("Tiempo: " + str(self.timer), True, (255, 0, 0))
+        surface.blit(text, (10, 10))
+
+    def update_timer(self):
+        elapsed_time = self.clock.tick(60) / 1000
+        self.timer -= elapsed_time
+
+        if self.timer <= 0:
+            print("Se ha agotado el tiempo")
+            sys.exit(1)
 
     def show_pieces(self, surface):
         for row in range(ROWS):
